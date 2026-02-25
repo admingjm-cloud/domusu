@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有限会社ドムス | DOMUS Co., Ltd.</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --primary-dark: #1a252f;
+            --accent: #E74C3C;
+            --bg: #F8F9FA;
+            --text: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Language Control */
+        body.jp .lang-en { display: none !important; }
+        body.en .lang-jp { display: none !important; }
+        body.en { font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px; }
+
+        h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', 'Noto Sans JP', sans-serif; letter-spacing: 0.05em; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+        .section-padding { padding: 120px 5%; }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 25px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: var(--transition);
+            backdrop-filter: blur(0px);
+        }
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--white); letter-spacing: 2px; z-index: 1001; }
+        header.scrolled .logo { color: var(--primary); }
+        nav ul { display: flex; gap: 40px; }
+        nav a { 
+            color: var(--white); font-weight: 500; font-size: 0.9rem; position: relative; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        header.scrolled nav a { color: var(--primary); }
+        nav a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 1px; background: var(--accent); transition: var(--transition);
+        }
+        nav a:hover::after { width: 100%; }
+        .lang-switch { display: flex; gap: 15px; color: var(--white); font-size: 0.85rem; margin-left: 30px; cursor: pointer; }
+        header.scrolled .lang-switch { color: var(--primary); }
+        .lang-btn { opacity: 0.5; transition: 0.3s; }
+        .lang-btn.active { opacity: 1; font-weight: bold; border-bottom: 1px solid var(--accent); }
+        .hamburger { display: none; color: var(--white); font-size: 1.5rem; cursor: pointer; z-index: 1001; }
+        header.scrolled .hamburger { color: var(--primary); }
+
+        /* Hero */
+        #home { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--white); }
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center/cover;
+            z-index: -2;
+        }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.4); z-index: -1; }
+        .hero-content h1 { font-size: 4.5rem; margin-bottom: 10px; font-weight: 700; }
+        .hero-content p { font-size: 1.4rem; font-weight: 300; letter-spacing: 0.2em; margin-bottom: 40px; }
+        .hero-sub { font-size: 0.9rem; opacity: 0.9; letter-spacing: 0.1em; border-top: 1px solid rgba(255,255,255,0.5); padding-top: 20px; display: inline-block; }
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--white); opacity: 0.8; }
+        .scroll-line { width: 1px; height: 60px; background: var(--white); animation: scrollDown 2s infinite; }
+        @keyframes scrollDown { 0% { height: 0; transform-origin: top; } 50% { height: 60px; transform-origin: top; } 51% { height: 60px; transform-origin: bottom; } 100% { height: 0; transform-origin: bottom; } }
+
+        /* Headers */
+        .section-header { margin-bottom: 80px; text-align: center; }
+        .section-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-header .subtitle { color: var(--accent); font-family: 'Montserrat'; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+
+        /* News */
+        #news { background: var(--white); }
+        .news-list { max-width: 900px; margin: 0 auto; border-top: 1px solid #eee; }
+        .news-item { display: flex; align-items: baseline; padding: 25px 0; border-bottom: 1px solid #eee; transition: var(--transition); cursor: pointer; }
+        .news-item:hover { padding-left: 15px; background: #fafafa; }
+        .news-date { width: 120px; font-family: 'Montserrat'; color: var(--text-light); font-size: 0.9rem; }
+        .news-cat { font-size: 0.75rem; background: var(--primary); color: var(--white); padding: 2px 10px; margin-right: 20px; border-radius: 2px; min-width: 80px; text-align: center; }
+        .news-title { flex: 1; font-weight: 500; }
+        .news-arrow { color: var(--accent); opacity: 0; transition: 0.3s; }
+        .news-item:hover .news-arrow { opacity: 1; transform: translateX(5px); }
+
+        /* Philosophy */
+        #philosophy {
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1506146332389-18140dc7b2fb?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            padding: 150px 5%; display: flex; justify-content: flex-end;
+        }
+        .philosophy-card {
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 60px; max-width: 600px; border-left: 5px solid var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .philosophy-card h3 { font-size: 2rem; margin-bottom: 30px; color: var(--primary); }
+
+        /* Services (Double Image Flip Logic) */
+        #services { background: #f4f6f8; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .service-card { height: 320px; perspective: 1000px; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .service-card:hover .card-inner { transform: rotateY(180deg); }
+        
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px;
+            background-size: cover; background-position: center; color: var(--white);
+        }
+        .card-front { z-index: 2; }
+        .card-front::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.65); border-radius: 4px; z-index: -1; transition: 0.3s;
+        }
+        .service-card:hover .card-front::before { background: rgba(44, 62, 80, 0.8); }
+        .card-front i { font-size: 3rem; color: var(--white); margin-bottom: 25px; transition: 0.3s; }
+        .service-card:hover .card-front i { transform: scale(1.1); color: var(--accent); }
+        .card-front h3 { font-size: 1.1rem; letter-spacing: 1px; z-index: 1; }
+        .card-back { transform: rotateY(180deg); z-index: 1; }
+        .card-back::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(20, 20, 20, 0.85); border-radius: 4px; z-index: -1;
+        }
+        .card-front *, .card-back * { position: relative; z-index: 2; }
+        .card-back h3 { margin-bottom: 15px; color: var(--accent); }
+        .card-back p { font-size: 0.9rem; line-height: 1.6; }
+
+        /* Projects (Grid Update for 6 items) */
+        #projects { background: var(--white); }
+        .project-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+        }
+        .project-item { position: relative; overflow: hidden; height: 300px; cursor: pointer; }
+        .project-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .project-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(44,62,80,0.9), transparent);
+            color: var(--white); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+            opacity: 0; transition: 0.4s;
+        }
+        .project-item:hover img { transform: scale(1.1); }
+        .project-item:hover .project-overlay { opacity: 1; }
+        .project-cat { font-size: 0.8rem; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; }
+
+        /* Message */
+        #message { background: var(--bg); }
+        .message-container { display: flex; gap: 60px; max-width: 1100px; margin: 0 auto; align-items: center; }
+        .message-img { flex: 1; }
+        .message-img img { 
+            width: 100%; border-radius: 4px; box-shadow: 20px 20px 0 var(--white); 
+            height: 500px; object-fit: cover; object-position: top;
+        }
+        .message-text { flex: 1.2; }
+        .message-text h3 { font-size: 1.8rem; margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 15px; display: inline-block; }
+        .signature { margin-top: 30px; font-family: 'serif'; font-size: 1.2rem; text-align: right; }
+
+        /* Company */
+        .company-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; }
+        .company-dl { display: grid; grid-template-columns: 120px 1fr; border-top: 1px solid #ddd; }
+        .company-dl dt, .company-dl dd { padding: 20px 0; border-bottom: 1px solid #ddd; }
+        .company-dl dt { font-weight: bold; color: var(--primary); }
+
+        /* CTA */
+        #cta {
+            position: relative; background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            padding: 100px 5%; text-align: center; color: var(--white);
+        }
+        .cta-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.7); backdrop-filter: blur(5px); }
+        .cta-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+        .cta-btn {
+            display: inline-block; background: var(--accent); color: var(--white); padding: 18px 50px; font-weight: 600; margin-top: 30px; border-radius: 50px; transition: var(--transition);
+        }
+        .cta-btn:hover { background: var(--white); color: var(--accent); transform: translateY(-5px); }
+
+        /* Contact */
+        #contact { background: var(--white); }
+        .contact-form { max-width: 700px; margin: 0 auto; display: grid; gap: 20px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; border: 1px solid #ddd; background: #fafafa; font-family: inherit; transition: 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); background: var(--white); outline: none; }
+        .form-group textarea { height: 180px; resize: vertical; }
+
+        /* Footer */
+        footer { background: var(--primary-dark); color: #bdc3c7; padding: 60px 5% 20px; font-size: 0.9rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 50px; }
+        .footer-col h4 { color: var(--white); margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a:hover { color: var(--accent); padding-left: 5px; }
+        .copyright { text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
+
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.8rem; }
+            .philosophy-card { padding: 30px; margin: 0; }
+            #philosophy { justify-content: center; }
+            .company-layout, .message-container { grid-template-columns: 1fr; }
+            .message-img { order: -1; margin-bottom: 20px; }
+            .hamburger { display: block; }
+            nav {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: var(--white); padding: 80px 40px; transition: 0.5s; box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            }
+            nav.active { right: 0; }
+            nav ul { flex-direction: column; gap: 20px; }
+            nav a { color: var(--primary); font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body class="jp">
+
+    <!-- Header -->
+    <header>
+        <div class="logo">DOMUS</div>
+        <div class="hamburger"><i class="fas fa-bars"></i></div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#philosophy"><span class="lang-jp">理念</span><span class="lang-en">Philosophy</span></a></li>
+                <li><a href="#services"><span class="lang-jp">事業内容</span><span class="lang-en">Services</span></a></li>
+                <li><a href="#projects"><span class="lang-jp">施工事例</span><span class="lang-en">Projects</span></a></li>
+                <li><a href="#company"><span class="lang-jp">会社概要</span><span class="lang-en">Company</span></a></li>
+                <li><a href="#contact"><span class="lang-jp">お問い合わせ</span><span class="lang-en">Contact</span></a></li>
+            </ul>
+        </nav>
+        <div class="lang-switch">
+            <span class="lang-btn active" data-lang="jp">JP</span>
+            <span class="lang-btn" data-lang="en">EN</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="gsap-fade-up">DOMUS</h1>
+            <p class="gsap-fade-up">
+                <span class="lang-jp">信頼と創造の建築パートナー</span>
+                <span class="lang-en">Building Trust & Creativity</span>
+            </p>
+            <div class="hero-sub gsap-fade-up">
+                <span class="lang-jp">1976年創業 | 有限会社ドムス</span>
+                <span class="lang-en">Est. 1976 | DOMUS Co., Ltd.</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="lang-jp">スクロール</span><span class="lang-en">Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- News (Fixed Language Tags) -->
+    <section id="news" class="section-padding">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">News & Topics</span>
+            <h2><span class="lang-jp">お知らせ</span><span class="lang-en">Latest News</span></h2>
+        </div>
+        <div class="news-list gsap-fade-up">
+            <div class="news-item">
+                <div class="news-date">2025.12.05</div>
+                <div class="news-cat">
+                    <span class="lang-jp">お知らせ</span><span class="lang-en">Notice</span>
+                </div>
+                <div class="news-title">
+                    <span class="lang-jp">年末年始休業のお知らせ</span>
+                    <span class="lang-en">Notice of Year-end and New Year holidays</span>
+                </div>
+                <div class="news-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+            <div class="news-item">
+                <div class="news-date">2025.10.20</div>
+                <div class="news-cat">
+                    <span class="lang-jp">施工</span><span class="lang-en">Project</span>
+                </div>
+                <div class="news-title">
+                    <span class="lang-jp">鶴見区商業施設のリニューアル工事が完了しました</span>
+                    <span class="lang-en">Completed renovation of commercial facility in Tsurumi Ward</span>
+                </div>
+                <div class="news-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+            <div class="news-item">
+                <div class="news-date">2025.04.01</div>
+                <div class="news-cat">
+                    <span class="lang-jp">情報</span><span class="lang-en">Info</span>
+                </div>
+                <div class="news-title">
+                    <span class="lang-jp">コーポレートサイトをリニューアルしました</span>
+                    <span class="lang-en">Corporate website renewal</span>
+                </div>
+                <div class="news-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="philosophy">
+        <div class="philosophy-card gsap-fade-left">
+            <h3>
+                <span class="lang-jp">空間に、<br>確かな価値を。</span>
+                <span class="lang-en">Creating Value<br>in Every Space.</span>
+            </h3>
+            <p>
+                <span class="lang-jp">私たちは1976年の創業以来、横浜を拠点に地域に根ざした建築事業を展開してまいりました。商業施設の企画から個人の住宅設計まで、お客様の想いを形にすることが私たちの使命です。</span>
+                <span class="lang-en">Since our establishment in 1976, we have been developing community-based architectural businesses based in Yokohama. From commercial facility planning to residential design, our mission is to shape our customers' visions.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section-padding">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">Our Expertise</span>
+            <h2><span class="lang-jp">事業内容</span><span class="lang-en">Services</span></h2>
+        </div>
+        <div class="services-grid">
+            
+            <!-- Service 1 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-building"></i>
+                        <h3><span class="lang-jp">商業施設</span><span class="lang-en">Commercial</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">商業施設</span><span class="lang-en">Commercial</span></h3>
+                        <p>
+                            <span class="lang-jp">企画、設計施工、監理までトータルサポート。</span>
+                            <span class="lang-en">Planning, Design, Construction, and Supervision.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-house-chimney"></i>
+                        <h3><span class="lang-jp">住宅事業</span><span class="lang-en">Residential</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">住宅事業</span><span class="lang-en">Residential</span></h3>
+                        <p>
+                            <span class="lang-jp">注文住宅の設計、施工、監理。</span>
+                            <span class="lang-en">Custom home design, construction, and supervision.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1611095973763-414019e72400?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-hammer"></i>
+                        <h3><span class="lang-jp">建築木工</span><span class="lang-en">Woodwork</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">建築木工</span><span class="lang-en">Woodwork</span></h3>
+                        <p>
+                            <span class="lang-jp">各種造作工事、専門的な木工技術。</span>
+                            <span class="lang-en">Various joinery works and specialized woodworking.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-city"></i>
+                        <h3><span class="lang-jp">不動産</span><span class="lang-en">Real Estate</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">不動産事業</span><span class="lang-en">Real Estate</span></h3>
+                        <p>
+                            <span class="lang-jp">売買、賃貸、仲介及び管理。</span>
+                            <span class="lang-en">Sales, leasing, brokerage and management.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-couch"></i>
+                        <h3><span class="lang-jp">家具販売</span><span class="lang-en">Furniture</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">家具販売</span><span class="lang-en">Furniture</span></h3>
+                        <p>
+                            <span class="lang-jp">各種家具の販売、コーディネート。</span>
+                            <span class="lang-en">Sales and coordination of various furniture.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="service-card gsap-fade-up">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80');">
+                        <i class="fas fa-shield-halved"></i>
+                        <h3><span class="lang-jp">保険代理</span><span class="lang-en">Insurance</span></h3>
+                    </div>
+                    <div class="card-back" style="background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80');">
+                        <h3><span class="lang-jp">保険代理業</span><span class="lang-en">Insurance Agency</span></h3>
+                        <p>
+                            <span class="lang-jp">損害保険代理業。</span>
+                            <span class="lang-en">Non-life insurance agency business.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Projects (Updated Images & Bilingual Text) -->
+    <section id="projects" class="section-padding">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">Selected Works</span>
+            <h2><span class="lang-jp">施工事例</span><span class="lang-en">Projects</span></h2>
+        </div>
+        <div class="project-grid">
+            <!-- 1. Office -->
+            <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=800&q=80" alt="Office">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                        <span class="lang-jp">商業施設</span><span class="lang-en">Commercial</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">横浜オフィスプロジェクト</span>
+                        <span class="lang-en">Yokohama Office Project</span>
+                    </h3>
+                </div>
+            </div>
+            <!-- 2. Residential -->
+            <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Residence">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                         <span class="lang-jp">住宅</span><span class="lang-en">Residential</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">モダンハウス K邸</span>
+                        <span class="lang-en">Modern House K</span>
+                    </h3>
+                </div>
+            </div>
+            <!-- 3. Furniture (New: Wood Interior) -->
+            <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80" alt="Furniture">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                        <span class="lang-jp">家具</span><span class="lang-en">Furniture</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">オーダーメイド家具</span>
+                        <span class="lang-en">Custom Interior</span>
+                    </h3>
+                </div>
+            </div>
+            <!-- 4. Renovation (New: Structure/Construction) -->
+            <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1531835551805-16d864c8d311?auto=format&fit=crop&w=800&q=80" alt="Construction">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                        <span class="lang-jp">リノベーション</span><span class="lang-en">Renovation</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">鶴見区 リノベーション</span>
+                        <span class="lang-en">Tsurumi Renovation</span>
+                    </h3>
+                </div>
+            </div>
+             <!-- 5. Conference Room -->
+             <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80" alt="Conference">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                         <span class="lang-jp">オフィス</span><span class="lang-en">Office</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">会議室デザイン</span>
+                        <span class="lang-en">Corporate Meeting Room</span>
+                    </h3>
+                </div>
+            </div>
+             <!-- 6. Landscape/Garden (New: Modern Terrace/Garden) -->
+             <div class="project-item gsap-fade-up">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="Garden">
+                <div class="project-overlay">
+                    <span class="project-cat">
+                        <span class="lang-jp">造園</span><span class="lang-en">Landscape</span>
+                    </span>
+                    <h3>
+                        <span class="lang-jp">日本庭園・造園</span>
+                        <span class="lang-en">Japanese Garden Design</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message (New: Professional Friendly CEO) -->
+    <section id="message" class="section-padding">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">Message</span>
+            <h2><span class="lang-jp">代表挨拶</span><span class="lang-en">CEO Message</span></h2>
+        </div>
+        <div class="message-container">
+            <div class="message-img gsap-fade-right">
+                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=800&q=80" alt="Shoichi Okawa">
+            </div>
+            <div class="message-text gsap-fade-left">
+                <h3><span class="lang-jp">お客様と共に歩む、<br>最良のパートナーとして。</span><span class="lang-en">As your best partner.</span></h3>
+                <p>
+                    <span class="lang-jp">有限会社ドムスは1976年の創業以来、建築・不動産を通じて地域社会の発展に貢献してまいりました。私たちの強みは、企画から設計、施工、そしてアフターフォローまで一貫して行える体制にあります。</span>
+                    <span class="lang-en">Since our establishment in 1976, DOMUS has contributed to the development of the local community through architecture and real estate. Our strength lies in our integrated system from planning and design to construction.</span>
+                </p>
+                <div class="signature">
+                    <span class="lang-jp">代表取締役 大川 正一</span>
+                    <span class="lang-en">President Shoichi Okawa</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company (Bilingual Info) -->
+    <section id="company" class="section-padding" style="background:var(--white);">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">Profile</span>
+            <h2><span class="lang-jp">会社概要</span><span class="lang-en">Company Info</span></h2>
+        </div>
+        <div class="company-layout">
+            <div class="company-info gsap-fade-up">
+                <dl class="company-dl">
+                    <dt><span class="lang-jp">会社名</span><span class="lang-en">Name</span></dt>
+                    <dd><span class="lang-jp">有限会社ドムス</span><span class="lang-en">DOMUS Co., Ltd.</span></dd>
+                    
+                    <dt><span class="lang-jp">設立</span><span class="lang-en">Est.</span></dt>
+                    <dd><span class="lang-jp">1976年3月1日</span><span class="lang-en">March 1, 1976</span></dd>
+                    
+                    <dt><span class="lang-jp">資本金</span><span class="lang-en">Capital</span></dt>
+                    <dd><span class="lang-jp">300万円</span><span class="lang-en">3,000,000 JPY</span></dd>
+                    
+                    <dt><span class="lang-jp">代表者</span><span class="lang-en">Rep.</span></dt>
+                    <dd><span class="lang-jp">代表取締役 大川 正一</span><span class="lang-en">Shoichi Okawa</span></dd>
+                    
+                    <dt><span class="lang-jp">本社</span><span class="lang-en">Address</span></dt>
+                    <dd>
+                        <span class="lang-jp">〒230-0003 神奈川県横浜市鶴見区尻手３丁目５番１４－５０７号</span>
+                        <span class="lang-en">3-5-14-507 Shitte, Tsurumi-ku, Yokohama, Kanagawa, 230-0003 Japan</span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="map-container gsap-fade-up">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3248.567086884394!2d139.6735!3d35.532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60185e2b3b3b3b3b%3A0x123456789!2z56We5aWI5bed55yM5qiq5rWc5biC6ba06KaL5Yy65bC75omL77yT5LiB55uu77yV4oiS77yR77yU!5e0!3m2!1sja!2sjp!4v1600000000000" width="100%" height="400" style="border:0; border-radius:4px;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta">
+        <div class="cta-overlay"></div>
+        <div class="cta-content gsap-fade-up">
+            <h2><span class="lang-jp">お気軽にご相談ください</span><span class="lang-en">Let's Build Together</span></h2>
+            <p style="margin-top:20px; font-size:1.1rem;">
+                <span class="lang-jp">建築、リフォーム、不動産に関するご質問やご相談を承っております。</span>
+                <span class="lang-en">We accept questions and consultations regarding architecture, renovation, and real estate.</span>
+            </p>
+            <a href="#contact" class="cta-btn">
+                <span class="lang-jp">お問い合わせ</span><span class="lang-en">Contact Us</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Form (Bilingual Placeholders) -->
+    <section id="contact" class="section-padding">
+        <div class="section-header gsap-fade-up">
+            <span class="subtitle">Form</span>
+            <h2><span class="lang-jp">お問い合わせ</span><span class="lang-en">Contact</span></h2>
+        </div>
+        <form class="contact-form gsap-fade-up" action="mailto:info@domus.co.jp" method="post" enctype="text/plain">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="お名前 / Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="メールアドレス / Email" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="subject" placeholder="件名 / Subject">
+            </div>
+            <div class="form-group">
+                <textarea name="message" placeholder="お問い合わせ内容 / Message" required></textarea>
+            </div>
+            <div style="text-align:center;">
+                <button type="submit" class="cta-btn" style="border:none; cursor:pointer;">
+                    <span class="lang-jp">メールを送信する</span><span class="lang-en">Send Mail</span>
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>DOMUS Co., Ltd.</h4>
+                <p>
+                    <span class="lang-jp">〒230-0003 <br>神奈川県横浜市鶴見区尻手３丁目５番１４－５０７号</span>
+                    <span class="lang-en">3-5-14-507 Shitte, Tsurumi-ku, Yokohama, Japan</span>
+                </p>
+                <p style="margin-top:10px;">TEL: 045-717-8661</p>
+            </div>
+            <div class="footer-col">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#company">Company</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Business</h4>
+                <ul>
+                    <li><span class="lang-jp">商業施設設計・施工</span><span class="lang-en">Commercial Design</span></li>
+                    <li><span class="lang-jp">住宅設計・施工</span><span class="lang-en">Residential Design</span></li>
+                    <li><span class="lang-jp">不動産売買・管理</span><span class="lang-en">Real Estate</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">&copy; 1976-2025 有限会社ドムス DOMUS Co., Ltd. All Rights Reserved.</div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        const langBtns = document.querySelectorAll('.lang-btn');
+        const body = document.body;
+        const savedLang = localStorage.getItem('domus-lang') || 'jp';
+        setLanguage(savedLang);
+
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+
+        function setLanguage(lang) {
+            body.className = lang;
+            langBtns.forEach(b => {
+                if(b.getAttribute('data-lang') === lang) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            localStorage.setItem('domus-lang', lang);
+        }
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('nav');
+        hamburger.addEventListener('click', () => nav.classList.toggle('active'));
+        document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('active')));
+
+        gsap.registerPlugin(ScrollTrigger);
+        function initAnimations() {
+            gsap.utils.toArray('.gsap-fade-up').forEach(element => {
+                gsap.from(element, { scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }, y: 40, opacity: 0, duration: 1, ease: "power3.out" });
+            });
+            gsap.utils.toArray('.gsap-fade-right').forEach(element => {
+                gsap.from(element, { scrollTrigger: { trigger: element, start: "top 80%", }, x: -50, opacity: 0, duration: 1 });
+            });
+            gsap.utils.toArray('.gsap-fade-left').forEach(element => {
+                gsap.from(element, { scrollTrigger: { trigger: element, start: "top 80%", }, x: 50, opacity: 0, duration: 1 });
+            });
+            gsap.to(".hero-bg", { scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true }, y: 150 });
+        }
+        window.addEventListener('load', initAnimations);
+    </script>
+</body>
+</html>
